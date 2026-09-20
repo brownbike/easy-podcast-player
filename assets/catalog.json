@@ -16,5 +16,23 @@
     "title": "Smash Boom Best",
     "feedUrl": "https://feeds.publicradio.org/public_feeds/smash-boom-best/rss/rss",
     "artworkUrl": "https://smashboom.org/podcast-artwork.jpg"
+  },
+  {
+    "id": "grim-grimmer-grimmest",
+    "title": "Grim grimmer Grimmest",
+    "feedUrl": "https://feeds.megaphone.fm/PNA9230679490",
+    "artworkUrl": "https://podcastaddict.com/cache/artwork/thumb/2251889?v=1789929068"
+  },
+  {
+    "id": "who-when-wow",
+    "title": "Who, When, Wow!",
+    "feedUrl": "https://rss.art19.com/who-when-wow",
+    "artworkUrl": "https://podcastaddict.com/cache/artwork/thumb/3634953?v=1789929068"
+  },
+  {
+    "id": "unspookable",
+    "title": "Unspookable",
+    "feedUrl": "https://feeds.megaphone.fm/ARML9653488668",
+    "artworkUrl": "https://podcastaddict.com/cache/artwork/thumb/4506696?v=1789843330"
   }
 ]
