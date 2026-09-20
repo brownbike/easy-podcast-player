@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/models.dart';
 import '../common/podcast_artwork.dart';
+import '../player/mini_player.dart';
 import '../podcast/podcast_detail_screen.dart';
 import 'home_providers.dart';
 
@@ -19,6 +20,7 @@ class HomeScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, _) => _ErrorState(message: err.toString()),
       ),
+      bottomNavigationBar: const MiniPlayer(),
     );
   }
 }

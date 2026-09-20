@@ -1,7 +1,10 @@
 import 'package:epp/data/catalog/podcast_catalog.dart';
+import 'package:epp/data/playback/local_episode_store.dart';
+import 'package:epp/data/playback/playback_controller.dart';
 import 'package:epp/domain/models.dart';
 import 'package:epp/ui/home/home_providers.dart';
 import 'package:epp/ui/home/home_screen.dart';
+import 'package:epp/ui/player/playback_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -18,6 +21,9 @@ Widget _wrap(PodcastCatalog catalog) {
   return ProviderScope(
     overrides: [
       podcastCatalogProvider.overrideWithValue(catalog),
+      playbackControllerProvider.overrideWithValue(FakePlaybackController()),
+      localEpisodeStoreProvider
+          .overrideWithValue(InMemoryLocalEpisodeStore()),
     ],
     child: const MaterialApp(home: HomeScreen()),
   );

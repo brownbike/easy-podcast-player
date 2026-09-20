@@ -1,7 +1,10 @@
 import 'package:epp/data/feed/feed_cache.dart';
 import 'package:epp/data/feed/feed_client.dart';
 import 'package:epp/data/feed/rss_parser.dart';
+import 'package:epp/data/playback/local_episode_store.dart';
+import 'package:epp/data/playback/playback_controller.dart';
 import 'package:epp/domain/models.dart';
+import 'package:epp/ui/player/playback_providers.dart';
 import 'package:epp/ui/podcast/podcast_detail_providers.dart';
 import 'package:epp/ui/podcast/podcast_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +23,11 @@ const _podcast = Podcast(
   feedUrl: _testFeed,
 );
 
-Widget _wrap({required http.Client client, FeedCache? cache}) {
+Widget _wrap({
+  required http.Client client,
+  FeedCache? cache,
+  PlaybackController? playback,
+}) {
   return ProviderScope(
     overrides: [
       feedClientProvider.overrideWith((ref) => FeedClient(
@@ -28,6 +35,10 @@ Widget _wrap({required http.Client client, FeedCache? cache}) {
             parser: const RssParser(),
           )),
       feedCacheProvider.overrideWithValue(cache ?? InMemoryFeedCache()),
+      playbackControllerProvider
+          .overrideWithValue(playback ?? FakePlaybackController()),
+      localEpisodeStoreProvider
+          .overrideWithValue(InMemoryLocalEpisodeStore()),
     ],
     child: const MaterialApp(home: PodcastDetailScreen(podcast: _podcast)),
   );

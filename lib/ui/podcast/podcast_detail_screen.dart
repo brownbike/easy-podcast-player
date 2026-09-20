@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 import '../../domain/models.dart';
 import '../common/podcast_artwork.dart';
+import '../player/mini_player.dart';
+import '../player/playback_providers.dart';
 import 'podcast_detail_providers.dart';
 
 class PodcastDetailScreen extends ConsumerWidget {
@@ -24,6 +26,7 @@ class PodcastDetailScreen extends ConsumerWidget {
           error: (e, _) => _fatalError(context, e),
         ),
       ),
+      bottomNavigationBar: const MiniPlayer(),
     );
   }
 
@@ -97,12 +100,12 @@ class _EpisodeList extends ConsumerWidget {
   }
 }
 
-class _EpisodeTile extends StatelessWidget {
+class _EpisodeTile extends ConsumerWidget {
   const _EpisodeTile({required this.episode});
   final Episode episode;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final published = episode.publishedAt;
     final subtitle = <String>[
       if (published != null) DateFormat.yMMMd().format(published.toLocal()),
@@ -118,9 +121,7 @@ class _EpisodeTile extends StatelessWidget {
       title: Text(episode.title, maxLines: 2, overflow: TextOverflow.ellipsis),
       subtitle: subtitle.isEmpty ? null : Text(subtitle),
       trailing: const Icon(Icons.play_arrow),
-      onTap: () {
-        // Playback wiring lands in Phase 3.
-      },
+      onTap: () => ref.read(playbackControllerProvider).play(episode),
     );
   }
 }
