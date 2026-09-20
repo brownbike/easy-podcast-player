@@ -1,0 +1,20 @@
+[
+  {
+    "id": "story-pirates",
+    "title": "Story Pirates",
+    "feedUrl": "https://feeds.megaphone.fm/story-pirates",
+    "artworkUrl": "https://storypirates.com/podcast-artwork.jpg"
+  },
+  {
+    "id": "wow-in-the-world",
+    "title": "Wow in the World",
+    "feedUrl": "https://feeds.npr.org/510321/podcast.xml",
+    "artworkUrl": "https://media.npr.org/assets/img/2017/04/28/wow_podcasttile_sq-1400.jpg"
+  },
+  {
+    "id": "smash-boom-best",
+    "title": "Smash Boom Best",
+    "feedUrl": "https://feeds.publicradio.org/public_feeds/smash-boom-best/rss/rss",
+    "artworkUrl": "https://smashboom.org/podcast-artwork.jpg"
+  }
+]
