@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/models.dart';
 import '../common/podcast_artwork.dart';
+import '../podcast/podcast_detail_screen.dart';
 import 'home_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -53,7 +54,11 @@ class _PodcastTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Podcast detail screen is wired up in Phase 2.
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => PodcastDetailScreen(podcast: podcast),
+          ),
+        );
       },
       borderRadius: BorderRadius.circular(12),
       child: Column(
