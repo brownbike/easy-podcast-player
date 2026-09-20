@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/models.dart';
 import '../common/podcast_artwork.dart';
+import '../downloads/downloads_screen.dart';
 import '../player/mini_player.dart';
 import '../podcast/podcast_detail_screen.dart';
 import 'home_providers.dart';
@@ -14,7 +15,20 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final catalog = ref.watch(catalogProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Podcasts')),
+      appBar: AppBar(
+        title: const Text('Podcasts'),
+        actions: [
+          IconButton(
+            tooltip: 'Downloads',
+            icon: const Icon(Icons.download_done_outlined),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const DownloadsScreen()),
+              );
+            },
+          ),
+        ],
+      ),
       body: catalog.when(
         data: (podcasts) => _Grid(podcasts: podcasts),
         loading: () => const Center(child: CircularProgressIndicator()),

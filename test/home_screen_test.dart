@@ -1,7 +1,9 @@
 import 'package:epp/data/catalog/podcast_catalog.dart';
+import 'package:epp/data/download/episode_downloader.dart';
 import 'package:epp/data/playback/local_episode_store.dart';
 import 'package:epp/data/playback/playback_controller.dart';
 import 'package:epp/domain/models.dart';
+import 'package:epp/ui/downloads/downloads_providers.dart';
 import 'package:epp/ui/home/home_providers.dart';
 import 'package:epp/ui/home/home_screen.dart';
 import 'package:epp/ui/player/playback_providers.dart';
@@ -18,12 +20,14 @@ class _FakeCatalog implements PodcastCatalog {
 }
 
 Widget _wrap(PodcastCatalog catalog) {
+  final store = InMemoryLocalEpisodeStore();
   return ProviderScope(
     overrides: [
       podcastCatalogProvider.overrideWithValue(catalog),
       playbackControllerProvider.overrideWithValue(FakePlaybackController()),
-      localEpisodeStoreProvider
-          .overrideWithValue(InMemoryLocalEpisodeStore()),
+      localEpisodeStoreProvider.overrideWithValue(store),
+      episodeDownloaderProvider
+          .overrideWithValue(FakeEpisodeDownloader(store: store)),
     ],
     child: const MaterialApp(home: HomeScreen()),
   );

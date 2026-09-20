@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../domain/models.dart';
 import '../common/podcast_artwork.dart';
+import '../downloads/downloads_providers.dart';
 import '../player/mini_player.dart';
 import '../player/playback_providers.dart';
 import 'podcast_detail_providers.dart';
@@ -111,6 +112,8 @@ class _EpisodeTile extends ConsumerWidget {
       if (published != null) DateFormat.yMMMd().format(published.toLocal()),
       if (episode.duration != null) _formatDuration(episode.duration!),
     ].join(' · ');
+    final localAsync = ref.watch(localEpisodeProvider(episode.guid));
+    final isDownloaded = localAsync.valueOrNull?.localPath != null;
 
     return ListTile(
       leading: SizedBox(
@@ -120,7 +123,14 @@ class _EpisodeTile extends ConsumerWidget {
       ),
       title: Text(episode.title, maxLines: 2, overflow: TextOverflow.ellipsis),
       subtitle: subtitle.isEmpty ? null : Text(subtitle),
-      trailing: const Icon(Icons.play_arrow),
+      trailing: isDownloaded
+          ? const Icon(Icons.download_done)
+          : IconButton(
+              icon: const Icon(Icons.download_outlined),
+              tooltip: 'Download',
+              onPressed: () =>
+                  ref.read(episodeDownloaderProvider).enqueue(episode),
+            ),
       onTap: () => ref.read(playbackControllerProvider).play(episode),
     );
   }

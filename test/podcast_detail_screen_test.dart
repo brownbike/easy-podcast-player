@@ -1,9 +1,11 @@
+import 'package:epp/data/download/episode_downloader.dart';
 import 'package:epp/data/feed/feed_cache.dart';
 import 'package:epp/data/feed/feed_client.dart';
 import 'package:epp/data/feed/rss_parser.dart';
 import 'package:epp/data/playback/local_episode_store.dart';
 import 'package:epp/data/playback/playback_controller.dart';
 import 'package:epp/domain/models.dart';
+import 'package:epp/ui/downloads/downloads_providers.dart';
 import 'package:epp/ui/player/playback_providers.dart';
 import 'package:epp/ui/podcast/podcast_detail_providers.dart';
 import 'package:epp/ui/podcast/podcast_detail_screen.dart';
@@ -27,7 +29,10 @@ Widget _wrap({
   required http.Client client,
   FeedCache? cache,
   PlaybackController? playback,
+  LocalEpisodeStore? store,
+  EpisodeDownloader? downloader,
 }) {
+  final localStore = store ?? InMemoryLocalEpisodeStore();
   return ProviderScope(
     overrides: [
       feedClientProvider.overrideWith((ref) => FeedClient(
@@ -37,8 +42,9 @@ Widget _wrap({
       feedCacheProvider.overrideWithValue(cache ?? InMemoryFeedCache()),
       playbackControllerProvider
           .overrideWithValue(playback ?? FakePlaybackController()),
-      localEpisodeStoreProvider
-          .overrideWithValue(InMemoryLocalEpisodeStore()),
+      localEpisodeStoreProvider.overrideWithValue(localStore),
+      episodeDownloaderProvider
+          .overrideWithValue(downloader ?? FakeEpisodeDownloader(store: localStore)),
     ],
     child: const MaterialApp(home: PodcastDetailScreen(podcast: _podcast)),
   );
