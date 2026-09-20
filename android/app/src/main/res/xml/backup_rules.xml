@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Downloaded episode audio can be re-downloaded and would blow the
+         25 MB per-app auto-backup quota; keep it out of the backup set. -->
+    <exclude domain="file" path="downloads/"/>
+    <exclude domain="file" path="feed_cache/"/>
+</full-backup-content>
