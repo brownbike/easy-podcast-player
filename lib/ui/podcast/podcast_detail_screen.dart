@@ -6,6 +6,7 @@ import '../../domain/models.dart';
 import '../common/podcast_artwork.dart';
 import '../downloads/downloads_providers.dart';
 import '../player/mini_player.dart';
+import '../player/now_playing_screen.dart';
 import '../player/playback_providers.dart';
 import 'podcast_detail_providers.dart';
 
@@ -131,7 +132,12 @@ class _EpisodeTile extends ConsumerWidget {
               onPressed: () =>
                   ref.read(episodeDownloaderProvider).enqueue(episode),
             ),
-      onTap: () => ref.read(playbackControllerProvider).play(episode),
+      onTap: () {
+        ref.read(playbackControllerProvider).play(episode);
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const NowPlayingScreen()),
+        );
+      },
     );
   }
 }
