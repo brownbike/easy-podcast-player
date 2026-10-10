@@ -88,6 +88,12 @@ Map<String, dynamic> _toJson(LocalEpisode e) => {
       'positionSec': e.position.inSeconds,
       'completedAt': e.completedAt?.toIso8601String(),
       'autodelete': e.autodelete,
+      'episodeTitle': e.episodeTitle,
+      'artworkUrl': e.artworkUrl,
+      'publishedAt': e.publishedAt?.toIso8601String(),
+      'durationSec': e.duration?.inSeconds,
+      'feedUrl': e.feedUrl,
+      'audioUrl': e.audioUrl,
     };
 
 LocalEpisode _fromJson(String guid, Map<String, dynamic> json) => LocalEpisode(
@@ -101,4 +107,14 @@ LocalEpisode _fromJson(String guid, Map<String, dynamic> json) => LocalEpisode(
           ? DateTime.parse(json['completedAt'] as String)
           : null,
       autodelete: (json['autodelete'] as bool?) ?? false,
+      episodeTitle: json['episodeTitle'] as String?,
+      artworkUrl: json['artworkUrl'] as String?,
+      publishedAt: (json['publishedAt'] as String?) != null
+          ? DateTime.parse(json['publishedAt'] as String)
+          : null,
+      duration: (json['durationSec'] as int?) != null
+          ? Duration(seconds: json['durationSec'] as int)
+          : null,
+      feedUrl: json['feedUrl'] as String?,
+      audioUrl: json['audioUrl'] as String?,
     );

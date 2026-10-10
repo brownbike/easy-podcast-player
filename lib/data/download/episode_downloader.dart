@@ -74,6 +74,25 @@ class BackgroundEpisodeDownloader implements EpisodeDownloader {
     );
     _guidToTaskId[episode.guid] = task.taskId;
     await bd.FileDownloader().enqueue(task);
+
+    // Cache display metadata so the Downloads screen can render a rich tile
+    // even before (and after) the download completes.
+    final prev = await store.read(episode.guid);
+    await store.write(LocalEpisode(
+      guid: episode.guid,
+      localPath: prev?.localPath,
+      downloadedAt: prev?.downloadedAt,
+      position: prev?.position ?? Duration.zero,
+      completedAt: prev?.completedAt,
+      autodelete: prev?.autodelete ?? false,
+      episodeTitle: episode.title,
+      artworkUrl: episode.artworkUrl,
+      publishedAt: episode.publishedAt,
+      duration: episode.duration,
+      feedUrl: episode.feedUrl,
+      audioUrl: episode.audioUrl,
+    ));
+
     _controller.add(DownloadStatus(
       guid: episode.guid,
       stage: DownloadStage.queued,
@@ -113,6 +132,12 @@ class BackgroundEpisodeDownloader implements EpisodeDownloader {
             position: prev?.position ?? Duration.zero,
             completedAt: prev?.completedAt,
             autodelete: prev?.autodelete ?? false,
+            episodeTitle: prev?.episodeTitle,
+            artworkUrl: prev?.artworkUrl,
+            publishedAt: prev?.publishedAt,
+            duration: prev?.duration,
+            feedUrl: prev?.feedUrl,
+            audioUrl: prev?.audioUrl,
           ));
           _controller.add(DownloadStatus(
             guid: guid,
@@ -176,6 +201,12 @@ class FakeEpisodeDownloader implements EpisodeDownloader {
       downloadedAt: DateTime.now(),
       position: prev?.position ?? Duration.zero,
       autodelete: prev?.autodelete ?? false,
+      episodeTitle: episode.title,
+      artworkUrl: episode.artworkUrl,
+      publishedAt: episode.publishedAt,
+      duration: episode.duration,
+      feedUrl: episode.feedUrl,
+      audioUrl: episode.audioUrl,
     ));
     _controller.add(DownloadStatus(
       guid: episode.guid,

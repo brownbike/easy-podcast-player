@@ -66,6 +66,14 @@ class LocalEpisode {
   final DateTime? completedAt;
   final bool autodelete;
 
+  // Episode metadata cached at download time for display purposes.
+  final String? episodeTitle;
+  final String? artworkUrl;
+  final DateTime? publishedAt;
+  final Duration? duration;
+  final String? feedUrl;
+  final String? audioUrl;
+
   const LocalEpisode({
     required this.guid,
     this.localPath,
@@ -73,5 +81,28 @@ class LocalEpisode {
     this.position = Duration.zero,
     this.completedAt,
     this.autodelete = false,
+    this.episodeTitle,
+    this.artworkUrl,
+    this.publishedAt,
+    this.duration,
+    this.feedUrl,
+    this.audioUrl,
   });
+
+  /// Reconstructs a playable [Episode] from the cached metadata.
+  /// Returns null if the required fields (feedUrl, audioUrl) were never saved.
+  Episode? toEpisode() {
+    final f = feedUrl;
+    final a = audioUrl;
+    if (f == null || a == null) return null;
+    return Episode(
+      guid: guid,
+      feedUrl: f,
+      title: episodeTitle ?? guid,
+      audioUrl: a,
+      artworkUrl: artworkUrl,
+      publishedAt: publishedAt,
+      duration: duration,
+    );
+  }
 }

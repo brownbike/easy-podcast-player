@@ -125,7 +125,10 @@ class _EpisodeTile extends ConsumerWidget {
       title: Text(episode.title, maxLines: 2, overflow: TextOverflow.ellipsis),
       subtitle: subtitle.isEmpty ? null : Text(subtitle),
       trailing: isDownloaded
-          ? const Icon(Icons.download_done)
+          ? const IconButton(
+              icon: Icon(Icons.download_done),
+              onPressed: null,
+            )
           : IconButton(
               icon: const Icon(Icons.download_outlined),
               tooltip: 'Download',
