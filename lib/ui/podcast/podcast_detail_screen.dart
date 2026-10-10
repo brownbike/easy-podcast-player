@@ -115,6 +115,9 @@ class _EpisodeTile extends ConsumerWidget {
     ].join(' · ');
     final localAsync = ref.watch(localEpisodeProvider(episode.guid));
     final isDownloaded = localAsync.valueOrNull?.localPath != null;
+    final activeDownloads = ref.watch(activeDownloadsProvider);
+    final downloadProgress = activeDownloads[episode.guid];
+    final isDownloading = downloadProgress != null;
 
     return ListTile(
       leading: SizedBox(
@@ -129,12 +132,27 @@ class _EpisodeTile extends ConsumerWidget {
               icon: Icon(Icons.download_done),
               onPressed: null,
             )
-          : IconButton(
-              icon: const Icon(Icons.download_outlined),
-              tooltip: 'Download',
-              onPressed: () =>
-                  ref.read(episodeDownloaderProvider).enqueue(episode),
-            ),
+          : isDownloading
+              ? SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Center(
+                    child: SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        value: downloadProgress > 0 ? downloadProgress : null,
+                        strokeWidth: 2.5,
+                      ),
+                    ),
+                  ),
+                )
+              : IconButton(
+                  icon: const Icon(Icons.download_outlined),
+                  tooltip: 'Download',
+                  onPressed: () =>
+                      ref.read(episodeDownloaderProvider).enqueue(episode),
+                ),
       onTap: () {
         ref.read(playbackControllerProvider).play(episode);
         Navigator.of(context).push(

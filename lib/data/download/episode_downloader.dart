@@ -61,22 +61,8 @@ class BackgroundEpisodeDownloader implements EpisodeDownloader {
     final downloads = Directory('${dir.path}/downloads');
     if (!await downloads.exists()) await downloads.create(recursive: true);
 
-    final filename = '${_safeName(episode.guid)}.mp3';
-    final task = bd.DownloadTask(
-      taskId: episode.guid,
-      url: episode.audioUrl,
-      filename: filename,
-      baseDirectory: bd.BaseDirectory.applicationDocuments,
-      directory: 'downloads',
-      requiresWiFi: true,
-      updates: bd.Updates.statusAndProgress,
-      retries: 3,
-    );
-    _guidToTaskId[episode.guid] = task.taskId;
-    await bd.FileDownloader().enqueue(task);
-
-    // Cache display metadata so the Downloads screen can render a rich tile
-    // even before (and after) the download completes.
+    // Write metadata before enqueuing so _onUpdate always finds it in the
+    // store, even if the download completes before this method returns.
     final prev = await store.read(episode.guid);
     await store.write(LocalEpisode(
       guid: episode.guid,
@@ -92,6 +78,20 @@ class BackgroundEpisodeDownloader implements EpisodeDownloader {
       feedUrl: episode.feedUrl,
       audioUrl: episode.audioUrl,
     ));
+
+    final filename = '${_safeName(episode.guid)}.mp3';
+    final task = bd.DownloadTask(
+      taskId: episode.guid,
+      url: episode.audioUrl,
+      filename: filename,
+      baseDirectory: bd.BaseDirectory.applicationDocuments,
+      directory: 'downloads',
+      requiresWiFi: true,
+      updates: bd.Updates.statusAndProgress,
+      retries: 3,
+    );
+    _guidToTaskId[episode.guid] = task.taskId;
+    await bd.FileDownloader().enqueue(task);
 
     _controller.add(DownloadStatus(
       guid: episode.guid,
